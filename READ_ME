@@ -1,0 +1,3 @@
+# Athena Problem Files: ~/athena4.2/src/prob
+# Flash Problem Directories: ~/FLASH4.8/source/Simulation/SimulationMain
+# Setting Colorbar Limits: slc.set_zlim("pressure", 0.5, 2)

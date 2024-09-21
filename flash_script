@@ -1,0 +1,1 @@
+mpirun -np 4 ./flash4 2>&1 | tee DAVID_BLACKHOLE.outerr 

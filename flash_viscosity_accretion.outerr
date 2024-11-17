@@ -1,0 +1,21 @@
+yt : [INFO     ] 2024-11-10 16:59:39,287 Temporarily setting domain_right_edge = -domain_left_edge. This will be corrected automatically if it is not the case.
+yt : [WARNING  ] 2024-11-10 16:59:39,325 Assuming 1.0 = 1.0 cm
+yt : [WARNING  ] 2024-11-10 16:59:39,326 Assuming 1.0 = 1.0 s
+yt : [WARNING  ] 2024-11-10 16:59:39,327 Assuming 1.0 = 1.0 g
+yt : [INFO     ] 2024-11-10 16:59:39,503 Parameters: current_time              = 0.0
+yt : [INFO     ] 2024-11-10 16:59:39,503 Parameters: domain_dimensions         = [-128    0    1]
+yt : [INFO     ] 2024-11-10 16:59:39,503 Parameters: domain_left_edge          = [ 1.6  0.  -1. ]
+yt : [INFO     ] 2024-11-10 16:59:39,504 Parameters: domain_right_edge         = [-1.6 -0.   1. ]
+yt : [INFO     ] 2024-11-10 16:59:39,505 Parameters: cosmological_simulation   = 0
+Traceback (most recent call last):
+  File "accretion_rate.py", line 54, in <module>
+    vr = slc["velocity_x"]
+  File "/home/david/env-athena/lib/python3.8/site-packages/yt/data_objects/data_containers.py", line 229, in __getitem__
+    f = self._determine_fields([key])[0]
+  File "/home/david/env-athena/lib/python3.8/site-packages/yt/data_objects/data_containers.py", line 1465, in _determine_fields
+    finfo = self.ds._get_field_info(field)
+  File "/home/david/env-athena/lib/python3.8/site-packages/yt/data_objects/static_output.py", line 968, in _get_field_info
+    field_info, candidates = self._get_field_info_helper(field)
+  File "/home/david/env-athena/lib/python3.8/site-packages/yt/data_objects/static_output.py", line 1061, in _get_field_info_helper
+    raise YTFieldNotFound(field, ds=self)
+yt.utilities.exceptions.YTFieldNotFound: Could not find field 'velocity_x' in blackhole.0000.Gravity.

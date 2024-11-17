@@ -1,0 +1,1 @@
+(python3 accretion_rate.py 2>&1 | tee accretion_rate.outerr )

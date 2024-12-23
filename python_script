@@ -1,4 +1,4 @@
-script=accretion_rate.py
-outerr_name=athena_no_viscosity_accretion
+script="accretion_rate.py Athena++ 2e"
+outerr_name=athena++_prim_with_viscosity_accretion
 
 python3 $script 2>&1 | tee $outerr_name.outerr 

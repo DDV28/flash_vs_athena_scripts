@@ -3,15 +3,18 @@ import glob
 import os
 import matplotlib.pyplot as plt
 
-files = np.sort(glob.glob("/home/david/RUNS/1D_noh/id0/*tab"))
-os.chdir("/home/david/RUNS/1D_noh_plot")
+plot_directory = "/home/david/ATHENA++_RUNS/run_plots/sod"
+files = np.sort(glob.glob("/home/david/ATHENA++_RUNS/run_data/sod/*tab"))
+os.system("mkdir -p " + plot_directory)
+os.chdir(plot_directory)
+
 for i in range (len(files)):
     print(files[i])
     ds = np.loadtxt(files[i])
     
     fig, axs = plt.subplots(2)
     axs[0].plot(ds[:, 1], ds[:, 2])
-    axs[1].plot(ds[:, 1], ds[:, 6])
+    axs[1].plot(ds[:, 1], ds[:, 3])
     axs[0].set_ylabel("density [code]")
     axs[1].set_ylabel("pressure [code]")
     axs[1].set_xlabel("x [code]")

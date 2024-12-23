@@ -3,22 +3,32 @@ import yt
 import glob
 import os
 import matplotlib.pyplot as plt
+import sys
 
-isAthena = True
+code_type = sys.argv[1] 
+Problem_Type = "DAVID_BLACKHOLE/v"+sys.argv[2]
 
-if isAthena:
+if code_type == "Athena":
     Base_Path = "/home/david/ATHENA_RUNS/"
-    Problem_Type = "DAVID_BLACKHOLE/v2"
-    output_type = "/id0/*vtk"
+    output_type = "/id0/blackhole.????.vtk"
+    if "v2" in Problem_Type:
+        output_type = "/id0/blackhole_v2.????.vtk"
     level = 0
-    dims = [64, 64, 1]
+    dims = [128, 128, 1]
     save_name = Problem_Type.replace("/", "_")+"_Athena_Accretion_Data.npy"
-else:
+
+elif code_type == "Athena++":
+    Base_Path = "/home/david/ATHENA++_RUNS/"
+    output_type = "/blackhole*?????*hdf"
+    level = 0
+    dims = [128, 128, 1]
+    save_name = Problem_Type.replace("/", "_")+"_Athena++_Accretion_Data.npy"
+
+elif code_type == "Flash":
     Base_Path = "/home/david/FLASH_RUNS/"
-    Problem_Type = "DAVID_BLACKHOLE/v5"
     output_type = "/*plt_cnt_????"
-    level = 4 - 1
-    dims = [64, 64, 1]
+    level = 5 - 1
+    dims = [128, 128, 1]
     save_name = Problem_Type.replace("/", "_")+"_Flash_Accretion_Data.npy"
 
 print(save_name)
@@ -39,37 +49,41 @@ os.chdir(plot_path)
 accretion_rates = np.zeros(len(files))
 accretion_times = np.zeros(len(files))
 
-file_exist = glob.glob(save_name+"*")
-if len(file_exist) > 0:
-    data = np.load(file_exist[0])
-    plt.plot(data[0, :], data[1, :])
-    plt.xlabel("Time [code-time]")
-    plt.ylabel("Accretion Rate [code-mass/code-time]")
-    plt.tight_layout()
-    plt.savefig("Athena_Accretion_Rate.png")
-    plt.close()
-    exit()
-
 for ii in range (len(files)):
     ds = yt.load(files[ii])
    
-    if isAthena:
-        if "Gravity" in files[ii]:
-            continue
+    if code_type == "Athena":
         slc = ds.covering_grid(level = level, left_edge = ds.domain_left_edge, dims = dims)
         rr = slc["x"]
         vr = slc["velocity_x"]
         dr = slc["dx"]
+        dtheta = slc["dy"]
+        density = slc["density"]
 
-    else:
+    elif code_type == "Athena++":
+        slc = ds.covering_grid(level = level, left_edge = ds.domain_left_edge, dims = dims)
+        rr = slc["r"]
+        dr = slc["dr"]
+        dtheta = slc["dz"]
+        
+        if "2c" in Problem_Type:
+            density = slc["dens"]
+            vr = slc["mom1"] / slc["dens"] 
+        else:
+            density = slc["rho"]
+            vr = slc["vel1"]
+
+    elif code_type == "Flash":
         dims = ds.domain_dimensions * 2 ** level
         dims[2] = 1
         slc = ds.covering_grid(level = level, left_edge = ds.domain_left_edge, dims = dims)
         rr = slc["r"]
         vr = slc["velx"]
         dr = slc["dr"]
-
-    mass = slc["cell_mass"]
+        dtheta = slc["dtheta"]
+        density = slc["dens"]
+    
+    mass = density * dr * dtheta
     ins = rr == rr.min()
     mass_flux = mass * vr / (dr * 0.5)
     accretion_rate = np.median(mass_flux[ins])

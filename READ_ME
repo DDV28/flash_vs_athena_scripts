@@ -2,7 +2,12 @@
 # Flash Problem Directories: ~/FLASH4.8/source/Simulation/SimulationMain
 # Setting Colorbar Limits: slc.set_zlim("pressure", 0.5, 2)
 #
-# No Viscosity Blackhole Athena Simulation - V2
+# Plot error inside of accretion_plot.py
+#
+# No Viscosity Blackhole Athena Simulation - v2 (Used to be V2)
 # No Viscosity Blackhole Flash Simulation - v4d
-# With Viscosity Blackhole Athena Simulation - v4
-# With Viscosity Blackhole Flash Simulation - v5
+# With Viscosity Blackhole Athena Simulation - v4b
+# With Viscosity Blackhole Flash Simulation - v5b
+
+# No Viscosity Blackhole Athena++ Simulation - v2d
+# With Viscosity Blackhole Athena++ Simulation - v2e

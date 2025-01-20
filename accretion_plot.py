@@ -3,12 +3,12 @@ import glob
 import os
 import matplotlib.pyplot as plt
 
-title = "Without Viscosity 128 Log10 Y v7"
-#Problem_Type = ["DAVID_BLACKHOLE/v4b", "DAVID_BLACKHOLE/v5b", "DAVID_BLACKHOLE/v2e"]
-Problem_Type = ["DAVID_BLACKHOLE/v2", "DAVID_BLACKHOLE/v4d", "DAVID_BLACKHOLE/v2d"]
+title = "With Viscosity 128 Log10 Y v8 (sum)"
+Problem_Type = ["DAVID_BLACKHOLE/v4b", "DAVID_BLACKHOLE/v5b", "DAVID_BLACKHOLE/v2e"]
+#Problem_Type = ["DAVID_BLACKHOLE/v2", "DAVID_BLACKHOLE/v4d", "DAVID_BLACKHOLE/v2d"]
 
 Base_Path = ["/home/david/ATHENA_RUNS/", "/home/david/FLASH_RUNS/", "/home/david/ATHENA++_RUNS/"]
-save_name = ["Athena_Accretion_Data.npy", "Flash_Accretion_Data.npy", "Athena++_Accretion_Data.npy"]
+save_name = ["Athena_Accretion_Data_Sum.npy", "Flash_Accretion_Data_Sum.npy", "Athena++_Accretion_Data.npy"]
 labels = ["Athena", "FLASH", "Athena++"]
 colors = ["red", "blue", "green"]
 line_styles = ["solid", "dotted", "dashed"]

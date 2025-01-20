@@ -5,32 +5,54 @@ import os
 import matplotlib.pyplot as plt
 
 def polar_plot(Code_Type, vn):
-    Code_Type = "Athena++"
-    
+    print(Code_Type)
+    print(vn)
+
+    Base_Path = os.environ["SCRATCH"]
+    Problem_Type = "DAVID_BLACKHOLE/"+vn
+    resolution_pattern = "nx1"
+    level = 0
+    file_name = "athinput.DAVID_BLACKHOLE_"+vn[:-1].replace("no_", "")
     if "Athena" == Code_Type:
-        Base_Path = "/home/david/ATHENA_RUNS/"
-        Problem_Type = "DAVID_BLACKHOLE/v4"
+        Base_Path += "/ATHENA_RUNS/"
         output_type = "/id0/*vtk"
-        level = 0
-        dims = [64, 64, 1]
         fields = ["density", "pressure", "velocity_x", "velocity_y", "velocity_z", "Gravity"]
     
     elif "Athena++" == Code_Type:
-        Base_Path = "/home/david/ATHENA++_RUNS/"
-        Problem_Type = "DAVID_BLACKHOLE/v2d"
-        output_type = "/*hdf"
-        level = 0
-        dims = [128, 128, 1]
+        Base_Path += "/ATHENA++_RUNS/"
+        output_type = "/*.out2*hdf"
         fields = ["rho", "press", "vel1", "vel2", "vel3"]
         #fields = ["dens", "Etot", "mom1", "mom2", "mom3"]
     
     elif "Flash" == Code_Type:
-        Base_Path = "/home/david/FLASH_RUNS/"
-        Problem_Type = "DAVID_BLACKHOLE/v5"
+        Base_Path += "/FLASH_RUNS/"
         output_type = "/*plt_cnt_????"
-        level = 4 - 1
-        dims = [64, 64, 1]
+        file_name = "flash.par"
         fields = ["density", "pressure", "velx", "vely", "velz", "grav"]
+        resolution_pattern = "lrefine_min" 
+
+    Run_Path = Base_Path+"run_data/"+Problem_Type 
+    with open(Run_Path+"/"+file_name) as fid:
+        data = fid.readlines()
+    for line in data:
+        #print("Line:", line)
+        #print(resolution_pattern in line.lower())
+        if resolution_pattern in line.lower():
+            break
+    print("Line before:", line)    
+    line = line.split("=")
+    print("Line after:", line)
+    resolution = line[1]
+    if "#" in resolution:
+        resolution = resolution.split("#")
+        resolution = resolution[0]
+    resolution = int(resolution.replace("\n", "").replace(" ", ""))
+ 
+    if "Flash" == Code_Type:
+        level = resolution
+        resolution = 8 * 2**(level-1)
+
+    dims = [resolution, resolution, 1]
     
     save_type = Problem_Type+"_polar"
     files = np.sort(glob.glob(Base_Path+"run_data/"+Problem_Type+"/*forced*"))
@@ -41,15 +63,19 @@ def polar_plot(Code_Type, vn):
     
     #plot_path = Base_Path+"run_plots/"+Problem_Type.replace("/","_")+"_plots"
     plot_path = Base_Path+"run_plots/"+Problem_Type
-    
+    plotted_files = np.sort(glob.glob(plot_path+"/*.png"))
+
     os.system("mkdir -p "+plot_path)
     os.chdir(plot_path)
     print(files)
+    print("plotted files length:", len(plotted_files))
     for ii in range (len(files)):
+        print("ii:", ii)
         if "Gravity" in files[ii]:
             continue
-       # if !("130" in files[ii]):
-        #    continue
+        if len(plotted_files) > ii:
+            print("Skipping because files already plotted")
+            continue
         ds = yt.load(files[ii])
         
         if "Athena" == Code_Type:
@@ -74,6 +100,7 @@ def polar_plot(Code_Type, vn):
         
         for jj in range (len(fields)):
             if Code_Type == "Athena" and fields[jj] == "Gravity":
+                continue
                 ds = yt.load(files[ii].replace(".vtk", ".Gravity.vtk"))
                 slc = ds.covering_grid(level = level, left_edge = ds.domain_left_edge, dims = dims)
                 print(ds.field_list)
@@ -101,3 +128,15 @@ def polar_plot(Code_Type, vn):
             save_name = save_type.replace("/", "_") + "_" + fields[jj] + "_" + file_number + ".png"
             plt.savefig(save_name)
             plt.close()
+
+Parameters = {
+        "Athena++":["no_v2", "v2"],
+        "Athena":["v2", "v4"],
+        "Flash":["v4", "v5"]}
+for Code_Type in Parameters:
+    for suffix in ["c","d","e","f","g", "h", "i", "j"]:
+        vns = Parameters[Code_Type]
+        for vn in vns:
+            vn += suffix
+            polar_plot(Code_Type, vn) 
+

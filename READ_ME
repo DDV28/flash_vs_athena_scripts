@@ -11,3 +11,27 @@
 
 # No Viscosity Blackhole Athena++ Simulation - v2d
 # With Viscosity Blackhole Athena++ Simulation - v2e
+
+# Finished Polar_plot.py Runs: Athena v2, v4 (c through g)
+# Resubmitted runs: Athena - v4f-h, v2g  Athena++ - no_v2g and f
+# no_v2c-f finished, but no_v2g only got to 300
+
+# Restarted Athena++ no_v2h and no_v2g finished. We decided to not i-j simulations
+
+# For Athena++: Output2 = prim and Output3 = cons
+# Larget simulation: 98304 cores
+
+
+# 1/19/25
+# Athena++ 
+#	- no_v2c-g and v2c-v2g finished, there are 583 files for no_v2h and 0 for v2h (athena++)
+#         - submmited v2h
+# Athena
+#       - v4f reached ~500 files, v4g reached 123 files, and v4h got 31 
+#       - v4c-v4e simulations finished,
+#       - v2c-v2g finished,  v2h did not run
+#       - submmited v2h and v4g-h
+# Flash
+#       - v4c-f finished, v5c-g finished
+#       - v4g reached ~100 files, v4h and v5h reached only 5 filesa
+#       - submmited v4g, v4h, and v5h

@@ -3,22 +3,22 @@ import glob
 import os
 import matplotlib.pyplot as plt
 
-title = "With Viscosity 128 Log10 Y v8 (sum)"
-Problem_Type = ["DAVID_BLACKHOLE/v4b", "DAVID_BLACKHOLE/v5b", "DAVID_BLACKHOLE/v2e"]
+title = "Without Viscosity Log10 Y v9"
+Problem_Type = ["v2", "v4", "no_v2"]
 #Problem_Type = ["DAVID_BLACKHOLE/v2", "DAVID_BLACKHOLE/v4d", "DAVID_BLACKHOLE/v2d"]
 
-Base_Path = ["/home/david/ATHENA_RUNS/", "/home/david/FLASH_RUNS/", "/home/david/ATHENA++_RUNS/"]
-save_name = ["Athena_Accretion_Data_Sum.npy", "Flash_Accretion_Data_Sum.npy", "Athena++_Accretion_Data.npy"]
 labels = ["Athena", "FLASH", "Athena++"]
+glob_labels = ["Athena", "Flash", "Athena++"]
 colors = ["red", "blue", "green"]
 line_styles = ["solid", "dotted", "dashed"]
 run_data = []
 save = title.replace(" ", "_")
 
-for ii in range(len(Base_Path)): 
-    plot_path = Base_Path[ii]+"run_plots/"+Problem_Type[ii]
-    os.chdir(plot_path)
-    
+for ii in range(len(labels)): 
+    fs = glob.glob("DAVID_BLACKHOLE_" + Problem_Type[ii] + "*_" +  glob_labels[ii] + "*.npy")
+    print("fs:", fs)
+    continue
+ 
     data = np.load(Problem_Type[ii].replace("/", "_")+"_"+save_name[ii])
     print("data", data[1, -1])
     
@@ -31,7 +31,7 @@ for ii in range(len(Base_Path)):
     if labels[ii]=="Athena":
         print("Time: ",data[0,:][:30])
         print("Accretion Rate: ",data[1, :][:30])
-
+exit()
 plt.xlabel("Time [code-time]")
 plt.ylabel("Log Accretion Rate [code-mass/code-time]")
 #plt.ylim(-4, -.7)
